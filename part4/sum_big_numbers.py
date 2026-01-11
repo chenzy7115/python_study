@@ -1,0 +1,6 @@
+print("Here are big numbers list:from 1 to 1_000_000")
+big_numbers = list(range(1, 1_000_001))
+print("minimum number is: ",min(big_numbers))
+print("maximum number is: ",max(big_numbers))
+print("length of the list is: ",len(big_numbers))
+print("sum of all numbers is: ",sum(big_numbers))
