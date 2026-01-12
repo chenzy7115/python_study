@@ -22,7 +22,7 @@ class AlienInvasion:
         # just create a ship instance.
         self.ship = Ship(self)
 
-        # Create a group to store bullets.
+        # Create a group to store bullets.  This is instance of pygame.sprite.Group class.
         self.bullets = pygame.sprite.Group()
 
         # clock instance to control the frame rate.
@@ -38,7 +38,10 @@ class AlienInvasion:
             self.ship.update()
 
             # Update bullet positions.
-            self.bullets.update()
+            self._update_bullets()
+            
+            # print the number of bullets in the group.
+            # print(len(self.bullets))
 
             # Redraw the screen during each pass through the loop.
             self._update_screen()
@@ -48,6 +51,16 @@ class AlienInvasion:
 
             # Control the frame rate.
             # self.clock.tick(60)
+            
+    def _update_bullets(self):
+            """Update position of bullets and get rid of old bullets."""
+            # Update bullet positions.
+            self.bullets.update()
+            
+            # Get rid of bullets that have disappeared.
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom <= 0:
+                    self.bullets.remove(bullet)
 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -79,9 +92,9 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
-
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
