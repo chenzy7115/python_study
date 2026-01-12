@@ -3,6 +3,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
 
 
 class AlienInvasion:
@@ -21,6 +22,12 @@ class AlienInvasion:
         # just create a ship instance.
         self.ship = Ship(self)
 
+        # Create a group to store bullets.
+        self.bullets = pygame.sprite.Group()
+
+        # clock instance to control the frame rate.
+        # self.clock = pygame.time.Clock()
+
     def run_game(self):
         """Start the main loop for the game."""
         while True:
@@ -30,11 +37,17 @@ class AlienInvasion:
             # Update the ship's position.
             self.ship.update()
 
+            # Update bullet positions.
+            self.bullets.update()
+
             # Redraw the screen during each pass through the loop.
             self._update_screen()
 
-            # Make the most recently drawn screen visible.
-            pygame.display.flip()
+            # # Make the most recently drawn screen visible.
+            # pygame.display.flip()
+
+            # Control the frame rate.
+            # self.clock.tick(60)
 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -54,6 +67,8 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
@@ -62,10 +77,20 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
+    def _fire_bullet(self):
+        """Create a new bullet and add it to the bullets group."""
+
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
+
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
+        # Make the most recently drawn screen visible.
+        pygame.display.flip()
 
 
 if __name__ == "__main__":
