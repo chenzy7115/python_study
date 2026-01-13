@@ -7,6 +7,7 @@ from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from button import Button
 
 
 class AlienInvasion:
@@ -34,7 +35,11 @@ class AlienInvasion:
         # Create a group to store aliens.
         self.aliens = pygame.sprite.Group()
 
+        # Create the fleet of aliens.
         self._create_fleet()
+
+        # Make the Play button.
+        self.play_button = Button(self, "Play")
 
         # clock instance to control the frame rate.
         # self.clock = pygame.time.Clock()
@@ -214,6 +219,10 @@ class AlienInvasion:
             bullet.draw_bullet()
         # Make the most recently drawn screen visible.
         self.aliens.draw(self.screen)
+
+        # Draw the play button if the game is inactive.
+        if not self.stats.game_active:
+            self.play_button.draw_button()
 
         pygame.display.flip()
 
